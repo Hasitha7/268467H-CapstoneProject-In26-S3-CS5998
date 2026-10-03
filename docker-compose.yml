@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  frontend:
+    image: node:18
+    working_dir: /app
+    volumes:
+      - ./frontend/resume-matcher-ui:/app
+    command: sh -lc "npm install && npm run dev -- --host 0.0.0.0"
+    ports:
+      - "5173:5173"
+
+  backend:
+    image: mcr.microsoft.com/dotnet/sdk:8.0
+    working_dir: /src
+    volumes:
+      - ./backend/ResumeMatcher.API:/src
+    command: sh -lc "dotnet restore && dotnet run --urls http://0.0.0.0:5000"
+    ports:
+      - "5000:5000"
+
+  nlp-service:
+    image: python:3.11
+    working_dir: /app
+    volumes:
+      - ./nlp-service:/app
+    command: sh -lc "pip install -r requirements.txt && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+    ports:
+      - "8000:8000"

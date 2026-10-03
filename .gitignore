@@ -1,0 +1,38 @@
+# OS / editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Node
+node_modules/
+dist/
+build/
+.env
+npm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+
+# .NET
+bin/
+obj/
+*.user
+*.suo
+*.db
+
+# Data / ML
+*.pkl
+*.joblib
+*.model
+*.h5
+*.pt
+
+# Environment
+.env.local
+.env.*
