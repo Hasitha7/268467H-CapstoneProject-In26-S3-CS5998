@@ -101,6 +101,9 @@ BEGIN
         Importance NVARCHAR(20) NOT NULL
             CONSTRAINT DF_JobDescriptionSkills_Importance
             DEFAULT N'Required',
+        NeedsReview BIT NOT NULL
+            CONSTRAINT DF_JobDescriptionSkills_NeedsReview
+            DEFAULT 0,
 
         CONSTRAINT PK_JobDescriptionSkills
             PRIMARY KEY (JobDescriptionId, SkillId),
@@ -117,6 +120,15 @@ BEGIN
         CONSTRAINT CK_JobDescriptionSkills_Importance
             CHECK (Importance IN (N'Required', N'Preferred'))
     );
+END;
+GO
+
+IF COL_LENGTH(N'dbo.JobDescriptionSkills', N'NeedsReview') IS NULL
+BEGIN
+    ALTER TABLE dbo.JobDescriptionSkills
+    ADD NeedsReview BIT NOT NULL
+        CONSTRAINT DF_JobDescriptionSkills_NeedsReview
+        DEFAULT 0 WITH VALUES;
 END;
 GO
 
@@ -237,7 +249,9 @@ FROM (VALUES
     (N'JavaScript', N'Programming'),
     (N'TypeScript', N'Programming'),
     (N'React', N'Framework'),
+    (N'ASP.NET', N'Framework'),
     (N'ASP.NET Core', N'Framework'),
+    (N'.NET', N'Framework'),
     (N'Flask', N'Framework'),
     (N'SQL', N'Database'),
     (N'SQL Server', N'Database'),

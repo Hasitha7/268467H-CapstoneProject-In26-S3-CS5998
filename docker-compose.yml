@@ -11,13 +11,17 @@ services:
       - "5173:5173"
 
   backend:
-    image: mcr.microsoft.com/dotnet/sdk:8.0
+    image: mcr.microsoft.com/dotnet/sdk:10.0
     working_dir: /src
     volumes:
       - ./backend/ResumeMatcher.API:/src
     command: sh -lc "dotnet restore && dotnet run --urls http://0.0.0.0:5000"
+    environment:
+      NlpService__BaseUrl: http://nlp-service:8000/
     ports:
       - "5000:5000"
+    depends_on:
+      - nlp-service
 
   nlp-service:
     image: python:3.11
