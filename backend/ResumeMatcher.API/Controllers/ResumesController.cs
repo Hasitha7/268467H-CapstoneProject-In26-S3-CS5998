@@ -16,7 +16,7 @@ public class ResumesController : ControllerBase
 
     [HttpPost]
     [Consumes("multipart/form-data")]
-    public async Task<IActionResult> UploadResume([FromForm] IFormFile file)
+    public async Task<IActionResult> UploadResume(IFormFile file)
     {
         try
         {
