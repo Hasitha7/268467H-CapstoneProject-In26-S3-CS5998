@@ -32,7 +32,7 @@ dotnet run
 
 ### API and matching
 
-The API uses Dapper with the SQL Server schema in `database/create_database.sql`. Run that script before using database-backed routes; it also adds the `NeedsReview` flag used for human review of extracted job skills. Start the NLP service as well for matching and evaluation routes. The first Sentence-BERT request downloads `sentence-transformers/all-MiniLM-L6-v2` if it is not already cached.
+The API uses Dapper with the SQL Server schema in `database/create_database.sql`. Run that script before using database-backed routes; it also adds the `NeedsReview` flag used for human review of extracted job skills. Start the NLP service as well for matching and evaluation routes. The NLP service loads `sentence-transformers/all-MiniLM-L6-v2` once during startup; its first startup downloads the model if it is not already cached.
 
 - Job descriptions: `POST/GET /api/job-descriptions`, `GET/PUT/DELETE /api/job-descriptions/{id}`, `POST /api/job-descriptions/{id}/extract-skills`. Review or edit extracted skill importance using `PUT /api/job-descriptions/{id}/skills` with a `skills` array of `{ "skillName": "...", "importance": "Required|Preferred" }`.
 - Skills: `GET/POST /api/skills`, `PUT /api/skills/{id}`, `GET /api/skills/categories`, `GET /api/skills/search?query=...`.
@@ -53,6 +53,13 @@ source .venv/bin/activate  # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
+
+The NLP API provides `/health`, `/nlp/extract-skills`, `/nlp/tfidf-score`,
+`/nlp/semantic-score`, `/nlp/skill-coverage`, `/nlp/analyze`, and `/nlp/evaluate`.
+The original `/similarity` route remains for backend compatibility. See
+[`nlp-service/README.md`](./nlp-service/README.md) for request/response details,
+the score formula, configuration, and tests. Run tests with
+`python -m pytest` from `nlp-service`.
 
 ## Docker
 
